@@ -1,0 +1,584 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>冷藏车运营管理系统</title>
+<style>
+:root{--p:#1a73e8;--pd:#1557b0;--s:#0f9d58;--d:#ea4335;--w:#f4b400;--bg:#eef1f5;--c:#fff;--t:#202124;--ts:#5f6368;--b:#dadce0;--r:8px;--sh:0 1px 3px rgba(0,0,0,0.1)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",Roboto,sans-serif;background:var(--bg);color:var(--t);line-height:1.5;padding:14px}
+.hd{background:var(--p);color:#fff;padding:18px 22px;border-radius:var(--r);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.hd h1{font-size:20px;font-weight:600}.c{max-width:1200px;margin:0 auto}
+.card{background:var(--c);border-radius:var(--r);box-shadow:var(--sh);padding:18px;margin-bottom:14px}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border:none;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all 0.15s}
+.btn-p{background:var(--p);color:#fff}.btn-p:hover{background:var(--pd)}.btn-s{background:var(--s);color:#fff}.btn-d{background:var(--d);color:#fff}
+.btn-o{background:transparent;border:1px solid var(--b);color:var(--t)}.btn-o:hover{background:#f1f3f4}.btn-sm{padding:4px 10px;font-size:12px}
+.tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;margin-bottom:16px}
+.tc{background:var(--c);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;cursor:pointer;border-left:4px solid var(--p)}
+.tc:hover{box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+.tch{padding:14px 18px 10px;display:flex;justify-content:space-between;align-items:center}
+.tn{font-size:16px;font-weight:600}.tp{font-size:12px;color:var(--ts)}
+.tcs{padding:0 18px 14px;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.si{font-size:12px;color:var(--ts)}.si strong{color:var(--t);font-size:14px;display:block}
+.mo{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:1000;justify-content:center;align-items:flex-start;padding:20px;overflow-y:auto}
+.mo.a{display:flex}.m{background:var(--c);border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,0.25);max-width:720px;width:100%;margin:auto;padding:22px}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--bg)}
+.mh h2{font-size:18px}.mc{background:none;border:none;font-size:22px;cursor:pointer;color:var(--ts);padding:2px 6px}.mc:hover{color:var(--t)}
+.st{font-size:14px;font-weight:600;color:var(--p);margin:14px 0 10px;padding:0 0 4px;border-bottom:1px solid var(--bg)}
+.fg{margin-bottom:10px}.fg label{display:block;font-size:12px;font-weight:500;margin-bottom:3px;color:var(--t)}
+.fg input,.fg select,.fg textarea{width:100%;padding:7px 9px;border:1px solid var(--b);border-radius:5px;font-size:13px;font-family:inherit}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 2px rgba(26,115,232,0.12)}
+.fg input[readonly]{background:#f5f5f5}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fw{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.f4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.et{width:100%;border-collapse:collapse;font-size:13px}
+.et th{text-align:left;padding:8px 10px;border-bottom:2px solid var(--b);font-weight:600;color:var(--ts);font-size:12px;white-space:nowrap}
+.et td{padding:8px 10px;border-bottom:1px solid #eee;white-space:nowrap}
+.et tr:hover td{background:#f8f9fa}
+.eb{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500}
+.bf{background:#e8f0fe;color:#1a73e8}.bt{background:#fce8e6;color:#d93025}.bu{background:#e6f4ea;color:#137333}
+.bft{background:#fef7e0;color:#e37400}.bm{background:#f3e8fd;color:#7c3aed}.bo{background:#f1f3f4;color:#5f6368}.btrip{background:#e8f5e9;color:#2e7d32}
+.sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px;margin-bottom:16px}
+.sc{background:var(--c);border-radius:var(--r);box-shadow:var(--sh);padding:14px;text-align:center}
+.sc .v{font-size:20px;font-weight:700;margin:3px 0}.sc .l{font-size:12px;color:var(--ts)}.v.blue{color:var(--p)}.v.red{color:var(--d)}.v.green{color:var(--s)}
+.tabs{display:flex;gap:3px;margin-bottom:14px;border-bottom:2px solid var(--b)}
+.tab{padding:8px 16px;border:none;background:none;font-size:13px;font-weight:500;cursor:pointer;color:var(--ts);border-bottom:2px solid transparent;margin-bottom:-2px}
+.tab.a{color:var(--p);border-bottom-color:var(--p)}.tab:hover{color:var(--t)}
+.fb{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.fb input,.fb select{padding:7px 10px;border:1px solid var(--b);border-radius:5px;font-size:13px;font-family:inherit}
+.es{text-align:center;padding:40px 20px;color:var(--ts);font-size:14px}
+.gbox{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:12px;background:var(--bg);border-radius:6px;margin:10px 0;font-size:13px}
+.gbox>div{line-height:1.8}.gbox .lb{color:var(--ts);font-size:12px}.gbox .vl{font-weight:600;font-size:14px}.gbox .vl.g{color:var(--s)}.gbox .vl.r{color:var(--d)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+.split>div{padding:10px;border-radius:6px}.split .inc{background:#e8f5e9}.split .exp{background:#fce8e6}
+.split .st2{font-size:12px;color:var(--ts);margin-bottom:4px}.split .amt{font-size:20px;font-weight:700}.split .amt.g{color:var(--s)}.split .amt.r{color:var(--d)}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;margin:8px 0}
+.detail-grid>div{padding:6px 8px;border-bottom:1px solid #f1f3f4}.detail-grid .lb{color:var(--ts);font-size:12px}
+.backup-bar{background:#fff3cd;border:1px solid #ffc107;border-radius:6px;padding:12px 16px;margin-bottom:16px;font-size:13px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.backup-bar .txt{color:#856404}.backup-bar .btn{background:#ffc107;color:#856404}.backup-bar .btn:hover{background:#e0a800}
+@media(max-width:600px){.tg{grid-template-columns:1fr}.fr{grid-template-columns:1fr}.fw{grid-template-columns:1fr}.f4{grid-template-columns:1fr 1fr}.hd{flex-direction:column;align-items:flex-start}.split{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="c">
+<header class="hd">
+<div><h1>冷藏车运营管理</h1><div style="font-size:13px;opacity:0.85">优化版 · 5台 9.6米冷藏车 · 一趟一记 全部费用一次录入</div></div>
+<div style="display:flex;gap:6px;flex-wrap:wrap">
+<button class="btn" style="background:#fff;color:var(--p);font-weight:600" onclick="showAddTrip()">+ 记一趟</button>
+<button class="btn" style="background:rgba(255,255,255,0.15);color:#fff" onclick="showAddSimple()">记一笔</button>
+<button class="btn" style="background:rgba(255,255,255,0.15);color:#fff" onclick="showManageTrucks()">车辆管理</button>
+<button class="btn" style="background:#ffc107;color:#5f4300;font-weight:700" onclick="backupData()">立即备份</button>
+<button class="btn" style="background:rgba(255,255,255,0.15);color:#fff" onclick="exportData()">导出CSV</button>
+</div>
+</header>
+
+<div id="backupBar" class="backup-bar" style="display:none"></div>
+
+<div class="sg" id="overviewSummary"></div>
+<div class="tabs">
+<button class="tab a" onclick="switchTab('overview',this)">总览</button>
+<button class="tab" onclick="switchTab('records',this)">流水明细</button>
+<button class="tab" onclick="switchTab('monthly',this)">月度报表</button>
+</div>
+<div id="panelOverview"><div class="tg" id="truckGrid"></div></div>
+
+<div id="panelRecords" style="display:none">
+<div class="card">
+<div class="fb">
+<select id="filterTruck" onchange="rrc()"><option value="all">全部车辆</option></select>
+<select id="filterType" onchange="rrc()">
+<option value="all">全部类型</option><option value="trip">整趟记录</option><option value="fuel">加油费</option>
+<option value="toll">过路费</option><option value="urea">尿素费</option><option value="freight">运费收入</option>
+<option value="maintenance">维修保养</option><option value="other">其他费用</option>
+</select>
+<input type="date" id="filterDateFrom" onchange="rrc()"><span>至</span>
+<input type="date" id="filterDateTo" onchange="rrc()">
+<button class="btn btn-sm btn-o" onclick="cf()">清除</button>
+</div>
+<div style="overflow-x:auto">
+<table class="et">
+<thead><tr><th style="width:100px">日期</th><th style="width:60px">车辆</th><th style="width:80px">类型</th><th style="width:90px">金额(元)</th><th>详情</th><th style="width:100px">操作</th></tr></thead>
+<tbody id="recordsBody"></tbody>
+</table></div>
+<div id="recordsEmpty" class="es" style="display:none">暂无记录</div>
+</div></div>
+
+<div id="panelMonthly" style="display:none">
+<div class="card">
+<div class="fb">
+<select id="monthlyTruck" onchange="renderMonthly()"><option value="all">全部车辆</option></select>
+<select id="monthlyType" onchange="renderMonthly()"><option value="all">全部类型</option><option value="fuel">加油费</option><option value="toll">过路费</option><option value="urea">尿素费</option><option value="freight">运费收入</option><option value="maintenance">维修保养</option><option value="other">其他费用</option></select><select id="monthlyYear" onchange="renderMonthly()"></select>
+<select id="monthlyMonth" onchange="renderMonthly()"></select>
+</div>
+<div id="monthlyContent"></div>
+</div></div></div>
+<div class="mo" id="tripModal">
+<div class="m">
+<div class="mh"><h2 id="tripModalTitle">记一趟 - 完整运营记录</h2><button class="mc" onclick="closeModal('tripModal')">&times;</button></div>
+<form id="tripForm" onsubmit="saveTrip(event)">
+<input type="hidden" id="tripId">
+<div class="fr">
+<div class="fg"><label>车辆 *</label><select id="tripTruck" required></select></div>
+<div class="fg"><label>日期 *</label><input type="date" id="tripDate" required></div>
+</div>
+<div class="st">运输信息</div>
+<div class="fr">
+<div class="fg"><label>客户/货主</label><input type="text" id="tripCustomer" placeholder="客户或货主名称"></div>
+<div class="fg"><label>客户电话</label><input type="tel" id="tripCustomerPhone" placeholder="手机号"></div>
+</div>
+<div class="fr">
+<div class="fg"><label>货源地</label><input type="text" id="tripOrigin" placeholder="广州"></div>
+<div class="fg"><label>目的地</label><input type="text" id="tripDest" placeholder="北京"></div>
+</div>
+<div class="fr">
+<div class="fg"><label>出发时间</label><input type="datetime-local" id="tripDepart"></div>
+<div class="fg"><label>返回时间</label><input type="datetime-local" id="tripReturn"></div>
+</div>
+<div class="fw">
+<div class="fg"><label>载重（吨）</label><input type="number" id="tripLoad" step="0.1" min="0" placeholder="8.5"></div>
+<div class="fg"><label>行驶里程（公里）</label><input type="number" id="tripMileage" step="1" min="0" placeholder="1200"></div>
+<div class="fg"><label>本趟耗油（升）</label><input type="number" id="tripFuelUsed" step="0.1" min="0" placeholder="45"></div>
+</div>
+<div class="fg"><label>货物类型</label><input type="text" id="tripCargo" placeholder="冻品/蔬菜/水果等"></div>
+<div class="st">人员信息</div>
+<div class="fr">
+<div class="fg"><label>司机</label><input type="text" id="tripDriver" placeholder="姓名"></div>
+<div class="fg"><label>司机电话</label><input type="tel" id="tripDriverPhone" placeholder="手机号"></div>
+</div>
+<div class="fr">
+<div class="fg"><label>装货方</label><input type="text" id="tripShipper" placeholder="姓名"></div>
+<div class="fg"><label>装货电话</label><input type="tel" id="tripShipperPhone" placeholder="手机号"></div>
+</div>
+<div class="fr">
+<div class="fg"><label>卸货方</label><input type="text" id="tripReceiver" placeholder="姓名"></div>
+<div class="fg"><label>卸货电话</label><input type="tel" id="tripReceiverPhone" placeholder="手机号"></div>
+</div>
+<div class="st">费用明细（本趟所有收支）</div>
+<div class="fw"><div class="fg"><label>运费收入（元）</label><input type="number" id="tripIncome" step="0.01" min="0" placeholder="0"></div>
+<div class="fg"><label>收款状态</label><select id="tripPayStatus"><option value="unpaid">未收款</option><option value="partial">部分收款</option><option value="paid">已收款</option></select></div>
+<div class="fg"><label>加油费（元）</label><input type="number" id="tripFuelCost" step="0.01" min="0" placeholder="0"></div>
+</div>
+<div class="fw">
+<div class="fg"><label>过路费（元）</label><input type="number" id="tripToll" step="0.01" min="0" placeholder="0"></div>
+<div class="fg"><label>尿素费（元）</label><input type="number" id="tripUrea" step="0.01" min="0" placeholder="0"></div>
+<div class="fg"><label>维修保养（元）</label><input type="number" id="tripMaintenance" step="0.01" min="0" placeholder="0"></div>
+</div>
+<div class="fg"><label>其他费用（元）</label><input type="number" id="tripOther" step="0.01" min="0" placeholder="0"></div>
+<div class="fg"><label>备注</label><textarea id="tripNote" rows="2" placeholder="其他需要记录的信息"></textarea></div>
+<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
+<button type="button" class="btn btn-o" onclick="closeModal('tripModal')">取消</button>
+<button type="submit" class="btn btn-p" style="font-size:15px;padding:9px 24px">保存本趟记录</button>
+</div>
+</form></div></div>
+
+<div class="mo" id="simpleModal">
+<div class="m">
+<div class="mh"><h2>记一笔（零散收支）</h2><button class="mc" onclick="closeModal('simpleModal')">&times;</button></div>
+<form id="simpleForm" onsubmit="saveSimple(event)">
+<input type="hidden" id="simpleEditId">
+<div class="fr">
+<div class="fg"><label>车辆 *</label><select id="simpleTruck" required></select></div>
+<div class="fg"><label>日期 *</label><input type="date" id="simpleDate" required></div>
+</div>
+<div class="fr">
+<div class="fg"><label>类型 *</label>
+<select id="simpleType" required>
+<option value="fuel">加油费</option><option value="toll">过路费</option><option value="urea">尿素费</option>
+<option value="freight">运费收入</option><option value="maintenance">维修保养</option><option value="other">其他费用</option>
+</select></div>
+<div class="fg"><label>金额（元）*</label><input type="number" id="simpleAmount" step="0.01" min="0" placeholder="0.00" required></div>
+</div>
+<div class="fg"><label>备注</label><textarea id="simpleNote" rows="2" placeholder="选填"></textarea></div>
+<div style="display:flex;gap:8px;justify-content:flex-end">
+<button type="button" class="btn btn-o" onclick="closeModal('simpleModal')">取消</button>
+<button type="submit" class="btn btn-p">保存</button>
+</div>
+</form></div></div>
+
+<div class="mo" id="truckModal">
+<div class="m">
+<div class="mh"><h2>车辆管理</h2><button class="mc" onclick="closeModal('truckModal')">&times;</button></div>
+<div style="margin-bottom:14px"><button class="btn btn-s btn-sm" onclick="addTruck()">+ 添加车辆</button></div>
+<div id="truckList"></div>
+<div style="margin-top:14px;text-align:right"><button class="btn btn-p" onclick="closeModal('truckModal');init()">完成</button></div>
+</div></div>
+
+<!-- 单趟详情弹窗（查看完整记录） -->
+<div class="mo" id="tripDetailModal"><div class="m" id="tripDetailContent"></div></div>
+<script>﻿var TK="lg_trucks",EK="lg_expenses";
+var DTR=[{id:"t1",name:"1号车",plate:"",color:"#1a73e8"},{id:"t2",name:"2号车",plate:"",color:"#0f9d58"},{id:"t3",name:"3号车",plate:"",color:"#f4b400"},{id:"t4",name:"4号车",plate:"",color:"#ea4335"},{id:"t5",name:"5号车",plate:"",color:"#8e24aa"}];
+var ET={trip:{l:"整趟记录",b:"btrip"},fuel:{l:"加油费",b:"bf"},toll:{l:"过路费",b:"bt"},urea:{l:"尿素费",b:"bu"},freight:{l:"运费收入",b:"bft"},maintenance:{l:"维修保养",b:"bm"},other:{l:"其他费用",b:"bo"}};
+var API_URL = window.location.origin + "/api/data";
+var serverOk = false;
+function syncFromServer(){var xhr=new XMLHttpRequest();xhr.open("GET",API_URL,false);try{xhr.send();if(xhr.status===200){var d=JSON.parse(xhr.responseText);if(d.trucks&&d.expenses){st(d.trucks);se(d.expenses);serverOk=true}}}catch(e){}}
+function syncToServer(){if(!serverOk)return;var xhr=new XMLHttpRequest();xhr.open("POST",API_URL,true);xhr.setRequestHeader("Content-Type","application/json");xhr.send(JSON.stringify({trucks:gt(),expenses:ge()}))}
+
+function gt(){try{var d=localStorage.getItem(TK);return d?JSON.parse(d):JSON.parse(JSON.stringify(DTR))}catch(e){return JSON.parse(JSON.stringify(DTR))}}
+function st(t){localStorage.setItem(TK,JSON.stringify(t));syncToServer()}
+function ge(){try{var d=localStorage.getItem(EK);return d?JSON.parse(d):[]}catch(e){return[]}}
+function se(e){localStorage.setItem(EK,JSON.stringify(e));syncToServer()}
+function gid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function fd(s){if(!s)return"-";var d=new Date(s+"T00:00:00");return d.getFullYear()+"年"+String(d.getMonth()+1).padStart(2,"0")+"月"+String(d.getDate()).padStart(2,"0")+"日"}
+function fdt(s){if(!s)return"-";return s.replace("T"," ")}
+function fm(v){return Number(v).toLocaleString("zh-CN",{minimumFractionDigits:2,maximumFractionDigits:2})}
+function payLabel(s){return ({unpaid:"未收款",partial:"部分收款",paid:"已收款"})[s||"unpaid"]||"未收款"}
+function csvCell(v){v=v==null?"":String(v);return /[",\r\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
+function esc(v){v=v==null?"":String(v);return v.replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function markNeedBackup(msg){localStorage.setItem("lg_backup_dirty","1");showBackupBar(msg||"数据已变更，建议立即备份")}
+function lastBackupText(){var t=parseInt(localStorage.getItem("lg_backup_reminder")||"0");return t?"上次备份："+new Date(t).toLocaleString("zh-CN"):"还没有备份记录"}
+function pt(){
+  var ts=gt();
+  ["tripTruck","simpleTruck","filterTruck","monthlyTruck"].forEach(function(sid){
+    var s=document.getElementById(sid),cv=s.value;
+    s.innerHTML='<option value="all">全部车辆</option>'+ts.map(function(t){return '<option value="'+t.id+'">'+t.name+(t.plate?" ("+t.plate+")":"")+"</option>"}).join("");
+    if(cv)s.value=cv;
+  });
+  var yr=document.getElementById("monthlyYear"),mv=yr.value;yr.innerHTML="";
+  for(var y=2025;y<=2030;y++){var o=document.createElement("option");o.value=y;o.textContent=y+"年";if(y==(mv||new Date().getFullYear()))o.selected=true;yr.appendChild(o)}
+  var mo=document.getElementById("monthlyMonth"),mmv=mo.value;mo.innerHTML="";
+  for(var m=1;m<=12;m++){var o=document.createElement("option");o.value=m<10?"0"+m:m;o.textContent=m+"月";if(m==(mmv||new Date().getMonth()+1))o.selected=true;mo.appendChild(o)}
+}
+function ro(){
+  var exps=ge(),ti=0,te=0,tt=0,unpaid=0,partial=0;
+  exps.forEach(function(e){
+    if(e.type==="trip"){ti+=+(e.freightIncome||0);te+=+(e.fuelCost||0)+(e.tollCost||0)+(e.ureaCost||0)+(e.maintenanceCost||0)+(e.otherCost||0);tt++;if((e.payStatus||"unpaid")==="unpaid")unpaid+=+(e.freightIncome||0);if(e.payStatus==="partial")partial+=+(e.freightIncome||0)}
+    else if(e.type==="freight"){ti+=+e.amount;tt++}else te+=+e.amount
+  });
+  var p=ti-te,n=new Date(),ym=n.getFullYear()+"-"+String(n.getMonth()+1).padStart(2,"0"),mi=0,me=0;
+  exps.forEach(function(e){
+    if(e.date&&e.date.indexOf(ym)===0){
+      if(e.type==="trip"){mi+=+(e.freightIncome||0);me+=+(e.fuelCost||0)+(e.tollCost||0)+(e.ureaCost||0)+(e.maintenanceCost||0)+(e.otherCost||0)}
+      else if(e.type==="freight")mi+=+e.amount;else me+=+e.amount
+    }
+  });
+  document.getElementById("overviewSummary").innerHTML=
+    '<div class="sc"><div class="l">总收入</div><div class="v blue">'+fm(ti)+'</div></div>'+
+    '<div class="sc"><div class="l">总支出</div><div class="v red">'+fm(te)+'</div></div>'+
+    '<div class="sc"><div class="l">净利润</div><div class="v '+(p>=0?"green":"red")+'">'+fm(p)+'</div></div>'+
+    '<div class="sc"><div class="l">未收款</div><div class="v red">'+fm(unpaid)+'</div></div>'+
+    '<div class="sc"><div class="l">部分收款</div><div class="v red">'+fm(partial)+'</div></div>'+
+    '<div class="sc"><div class="l">总趟数</div><div class="v blue">'+tt+'</div></div>'+
+    '<div class="sc"><div class="l">本月收入</div><div class="v blue">'+fm(mi)+'</div></div>'+
+    '<div class="sc"><div class="l">本月支出</div><div class="v red">'+fm(me)+'</div></div>';
+}
+function rc(){
+  var ts=gt(),exps=ge(),h="";
+  ts.forEach(function(t){
+    var te=exps.filter(function(e){return e.truckId===t.id}),inc=0,exp=0,trips=0,fuel=0,toll=0,urea=0,km=0,fuelL=0,main=0;
+    te.forEach(function(e){
+      if(e.type==="trip"){inc+=+(e.freightIncome||0);exp+=+(e.fuelCost||0)+(e.tollCost||0)+(e.ureaCost||0)+(e.maintenanceCost||0)+(e.otherCost||0);trips++;km+=+(e.mileage||0);fuelL+=+(e.fuelUsed||0)+(e.fuelLiters||0);fuel+=+(e.fuelCost||0);toll+=+(e.tollCost||0);urea+=+(e.ureaCost||0);main+=+(e.maintenanceCost||0)}
+      else if(e.type==="freight"){inc+=+e.amount;trips++}else exp+=+e.amount;
+      if(e.type==="fuel"){fuel+=+e.amount;fuelL+=+(e.fuelLiters||0)}
+      if(e.type==="toll")toll+=+e.amount;
+      if(e.type==="maintenance")main+=+e.amount;
+    });
+    var pr=inc-exp,avgF=fuelL>0&&km>0?(fuelL/km*100).toFixed(1):"-";
+    h+='<div class="tc" style="border-left-color:'+(t.color||"#1a73e8")+'" onclick="showDetail(\u0027'+t.id+'\u0027)"><div class="tch"><div><div class="tn">'+t.name+'</div><div class="tp">'+(t.plate||"未设车牌")+'</div></div><span style="font-size:12px;font-weight:600;color:'+(pr>=0?"var(--s)":"var(--d)")+'">净利 '+fm(pr)+'</span></div><div class="tcs">'+
+    '<div class="si">运费收入 <strong>'+fm(inc)+'</strong></div><div class="si">总支出 <strong>'+fm(exp)+'</strong></div>'+
+    '<div class="si">加油费 <strong>'+fm(fuel)+'</strong></div><div class="si">过路费 <strong>'+fm(toll)+'</strong></div>'+
+    '<div class="si">尿素费 <strong>'+fm(urea)+'</strong></div>'+
+    '<div class="si">维修保养 <strong>'+fm(main)+'</strong></div><div class="si">总里程 <strong>'+(km?km.toFixed(0):"0")+' km</strong></div>'+
+    '<div class="si">总耗油 <strong>'+fm(fuelL)+' L</strong></div><div class="si">平均油耗 <strong>'+(avgF!="-"?avgF+" L/百公里":"-")+'</strong></div>'+
+    '<div class="si">完成趟数 <strong>'+trips+'</strong></div><div class="si">记录数 <strong>'+te.length+'</strong></div></div></div>';
+  });
+  document.getElementById("truckGrid").innerHTML=h;
+}
+function showAddTrip(tid){
+  document.getElementById("tripId").value="";document.getElementById("tripModalTitle").textContent="记一趟 - 完整运营记录";
+  document.getElementById("tripForm").reset();var n=new Date();
+  document.getElementById("tripDate").value=n.getFullYear()+"-"+String(n.getMonth()+1).padStart(2,"0")+"-"+String(n.getDate()).padStart(2,"0");
+  if(tid)document.getElementById("tripTruck").value=tid;openModal("tripModal");
+}
+function editTrip(id){
+  var e=ge().find(function(x){return x.id===id});if(!e)return;
+  document.getElementById("tripId").value=e.id;document.getElementById("tripModalTitle").textContent="编辑运营记录";
+  document.getElementById("tripTruck").value=e.truckId;document.getElementById("tripDate").value=e.date;
+  document.getElementById("tripCustomer").value=e.customerName||"";document.getElementById("tripCustomerPhone").value=e.customerPhone||"";
+  document.getElementById("tripOrigin").value=e.freightOrigin||"";document.getElementById("tripDest").value=e.freightDest||"";
+  document.getElementById("tripDepart").value=e.departTime||"";document.getElementById("tripReturn").value=e.returnTime||"";
+  document.getElementById("tripLoad").value=e.loadWeight||"";document.getElementById("tripMileage").value=e.mileage||"";
+  document.getElementById("tripFuelUsed").value=e.fuelUsed||"";document.getElementById("tripCargo").value=e.cargoType||"";
+  document.getElementById("tripDriver").value=e.driverName||"";document.getElementById("tripDriverPhone").value=e.driverPhone||"";
+  document.getElementById("tripShipper").value=e.shipperName||"";document.getElementById("tripShipperPhone").value=e.shipperPhone||"";
+  document.getElementById("tripReceiver").value=e.receiverName||"";document.getElementById("tripReceiverPhone").value=e.receiverPhone||"";
+  document.getElementById("tripIncome").value=e.freightIncome||"";document.getElementById("tripFuelCost").value=e.fuelCost||"";
+  document.getElementById("tripPayStatus").value=e.payStatus||"unpaid";
+  document.getElementById("tripToll").value=e.tollCost||"";document.getElementById("tripUrea").value=e.ureaCost||"";
+  document.getElementById("tripMaintenance").value=e.maintenanceCost||"";document.getElementById("tripOther").value=e.otherCost||"";
+  document.getElementById("tripNote").value=e.note||"";openModal("tripModal");
+}
+function saveTrip(ev){
+  ev.preventDefault();var id=document.getElementById("tripId").value;
+  var d={truckId:document.getElementById("tripTruck").value,date:document.getElementById("tripDate").value,type:"trip"};
+  if(!d.truckId||d.truckId==="all"||!d.date){alert("请选择车辆和日期");return}
+  d.customerName=document.getElementById("tripCustomer").value.trim();d.customerPhone=document.getElementById("tripCustomerPhone").value.trim();
+  d.freightOrigin=document.getElementById("tripOrigin").value.trim();d.freightDest=document.getElementById("tripDest").value.trim();
+  d.departTime=document.getElementById("tripDepart").value;d.returnTime=document.getElementById("tripReturn").value;
+  d.loadWeight=parseFloat(document.getElementById("tripLoad").value)||0;d.mileage=parseFloat(document.getElementById("tripMileage").value)||0;
+  d.fuelUsed=parseFloat(document.getElementById("tripFuelUsed").value)||0;d.cargoType=document.getElementById("tripCargo").value.trim();
+  d.driverName=document.getElementById("tripDriver").value.trim();d.driverPhone=document.getElementById("tripDriverPhone").value.trim();
+  d.shipperName=document.getElementById("tripShipper").value.trim();d.shipperPhone=document.getElementById("tripShipperPhone").value.trim();
+  d.receiverName=document.getElementById("tripReceiver").value.trim();d.receiverPhone=document.getElementById("tripReceiverPhone").value.trim();
+  d.freightIncome=parseFloat(document.getElementById("tripIncome").value)||0;d.fuelCost=parseFloat(document.getElementById("tripFuelCost").value)||0;
+  d.payStatus=document.getElementById("tripPayStatus").value||"unpaid";
+  d.tollCost=parseFloat(document.getElementById("tripToll").value)||0;d.ureaCost=parseFloat(document.getElementById("tripUrea").value)||0;
+  d.maintenanceCost=parseFloat(document.getElementById("tripMaintenance").value)||0;d.otherCost=parseFloat(document.getElementById("tripOther").value)||0;
+  d.note=document.getElementById("tripNote").value.trim();
+  if(!d.freightIncome&&!d.fuelCost&&!d.tollCost&&!d.ureaCost&&!d.maintenanceCost&&!d.otherCost){alert("请至少填写一项费用");return}
+  var exps=ge();if(id){var idx=exps.findIndex(function(x){return x.id===id});if(idx>=0){d.id=id;exps[idx]=d}}else{d.id=gid();d.createdAt=new Date().toISOString();exps.push(d)}
+  se(exps);closeModal("tripModal");init();markNeedBackup("本趟记录已保存，建议立即备份");
+}
+function showAddSimple(tid){
+  document.getElementById("simpleForm").reset();document.getElementById("simpleEditId").value="";
+  var n=new Date();document.getElementById("simpleDate").value=n.getFullYear()+"-"+String(n.getMonth()+1).padStart(2,"0")+"-"+String(n.getDate()).padStart(2,"0");
+  if(tid)document.getElementById("simpleTruck").value=tid;openModal("simpleModal");
+}
+function editSimple(id){
+  var e=ge().find(function(x){return x.id===id});if(!e)return;document.getElementById("simpleEditId").value=e.id;
+  document.getElementById("simpleTruck").value=e.truckId;document.getElementById("simpleDate").value=e.date;
+  document.getElementById("simpleType").value=e.type;document.getElementById("simpleAmount").value=e.amount;
+  document.getElementById("simpleNote").value=e.note||"";openModal("simpleModal");
+}
+function saveSimple(ev){
+  ev.preventDefault();var id=document.getElementById("simpleEditId").value;
+  var d={truckId:document.getElementById("simpleTruck").value,date:document.getElementById("simpleDate").value,type:document.getElementById("simpleType").value,amount:parseFloat(document.getElementById("simpleAmount").value),note:document.getElementById("simpleNote").value.trim()};
+  if(!d.truckId||d.truckId==="all"||!d.date||isNaN(d.amount)||d.amount<=0){alert("请填写完整信息");return}
+  var exps=ge();if(id){var idx=exps.findIndex(function(x){return x.id===id});if(idx>=0){d.id=id;exps[idx]=d}}else{d.id=gid();d.createdAt=new Date().toISOString();exps.push(d)}
+  se(exps);closeModal("simpleModal");init();markNeedBackup("收支记录已保存，建议立即备份");
+}
+function deleteExpense(id){if(!confirm("确定删除此记录？"))return;se(ge().filter(function(e){return e.id!==id}));init();markNeedBackup("记录已删除，建议立即备份")}
+function showTripDetail(id){
+  var e=ge().find(function(x){return x.id===id});if(!e||e.type!=="trip")return;
+  var ts=gt(),t=ts.find(function(x){return x.id===e.truckId});
+  var inc=e.freightIncome||0,ex=(e.fuelCost||0)+(e.tollCost||0)+(e.ureaCost||0)+(e.maintenanceCost||0)+(e.otherCost||0),pr=inc-ex;
+  var html='<div class="mh"><h2>'+(t?t.name:"")+' 运营详情</h2><button class="mc" onclick="closeModal(\'tripDetailModal\')">&times;</button></div>'+
+    '<div style="margin-bottom:12px;padding:10px;background:var(--bg);border-radius:6px;font-size:12px;color:var(--ts)">'+fd(e.date)+' | '+(e.freightOrigin||"")+(e.freightDest?" → "+e.freightDest:"")+'</div>'+
+    '<div class="split"><div class="inc"><div class="st2">运费收入</div><div class="amt g">'+fm(inc)+' 元</div></div>'+
+    '<div class="exp"><div class="st2">本趟支出合计</div><div class="amt r">'+fm(ex)+' 元</div></div></div>'+
+    '<div style="text-align:center;font-size:16px;font-weight:600;padding:6px 0;margin-bottom:8px;color:'+(pr>=0?"var(--s)":"var(--d)")+'">本趟净利润：'+fm(pr)+' 元</div>';
+  html+='<div class="st">运输信息</div><div class="detail-grid">'+
+    '<div><div class="lb">客户/货主</div>'+(e.customerName||"-")+'</div><div><div class="lb">客户电话</div>'+(e.customerPhone||"-")+'</div>'+
+    '<div><div class="lb">货源地</div>'+(e.freightOrigin||"-")+'</div><div><div class="lb">目的地</div>'+(e.freightDest||"-")+'</div>'+
+    '<div><div class="lb">出发时间</div>'+fdt(e.departTime)+'</div><div><div class="lb">返回时间</div>'+fdt(e.returnTime)+'</div>'+
+    '<div><div class="lb">载重</div>'+(e.loadWeight?e.loadWeight+" 吨":"-")+'</div><div><div class="lb">行驶里程</div>'+(e.mileage?e.mileage+" 公里":"-")+'</div>'+
+    '<div><div class="lb">本趟耗油</div>'+(e.fuelUsed?e.fuelUsed+" L":"-")+'</div><div><div class="lb">平均油耗</div>'+(e.fuelUsed>0&&e.mileage>0?(e.fuelUsed/e.mileage*100).toFixed(1):"-")+' L/百公里</div>'+
+    '<div><div class="lb">货物类型</div>'+(e.cargoType||"-")+'</div></div>';
+  html+='<div class="st">人员信息</div><div class="detail-grid">'+
+    '<div><div class="lb">司机</div>'+(e.driverName||"-")+'</div><div><div class="lb">司机电话</div>'+(e.driverPhone||"-")+'</div>'+
+    '<div><div class="lb">装货方</div>'+(e.shipperName||"-")+'</div><div><div class="lb">装货电话</div>'+(e.shipperPhone||"-")+'</div>'+
+    '<div><div class="lb">卸货方</div>'+(e.receiverName||"-")+'</div><div><div class="lb">卸货电话</div>'+(e.receiverPhone||"-")+'</div></div>';
+  html+='<div class="st">费用明细</div><div class="detail-grid">'+
+    '<div><div class="lb">运费收入</div><strong style="color:var(--s)">'+fm(inc)+' 元</strong></div>'+
+    '<div><div class="lb">收款状态</div>'+payLabel(e.payStatus)+'</div>'+
+    '<div><div class="lb">加油费</div>'+fm(e.fuelCost||0)+' 元'+(e.fuelLiters?' ('+e.fuelLiters+' L)':'')+'</div>'+
+    '<div><div class="lb">过路费</div>'+fm(e.tollCost||0)+' 元</div><div><div class="lb">尿素费</div>'+fm(e.ureaCost||0)+' 元</div>'+
+    '<div><div class="lb">维修保养</div>'+fm(e.maintenanceCost||0)+' 元</div><div><div class="lb">其他费用</div>'+fm(e.otherCost||0)+' 元</div></div>'+
+    (e.note?'<div style="margin-top:8px;padding:8px;background:#fff8e1;border-radius:4px;font-size:13px"><strong>备注：</strong>'+e.note+'</div>':'')+
+    '<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px"><button class="btn btn-p btn-sm" onclick="closeModal(\'tripDetailModal\');editTrip(\u0027'+id+'\u0027)">编辑</button><button class="btn btn-o btn-sm" onclick="closeModal(\'tripDetailModal\')">关闭</button></div>';
+  document.getElementById("tripDetailContent").innerHTML=html;openModal("tripDetailModal");
+}
+function showDetail(tid){
+  var ts=gt(),exps=ge(),t=ts.find(function(x){return x.id===tid});if(!t)return;
+  var te=exps.filter(function(e){return e.truckId===tid}),inc=0,exp=0,trips=0,bk={},rows="";
+  te.forEach(function(e){
+    if(e.type==="trip"){inc+=+(e.freightIncome||0);exp+=+(e.fuelCost||0)+(e.tollCost||0)+(e.ureaCost||0)+(e.maintenanceCost||0)+(e.otherCost||0);trips++}
+    else if(e.type==="freight"){inc+=+e.amount;trips++}else exp+=+e.amount;
+    if(e.type==="trip"){bk.fuel=(bk.fuel||0)+(e.fuelCost||0);bk.toll=(bk.toll||0)+(e.tollCost||0);bk.urea=(bk.urea||0)+(e.ureaCost||0);bk.maintenance=(bk.maintenance||0)+(e.maintenanceCost||0);bk.other=(bk.other||0)+(e.otherCost||0);bk.freight=(bk.freight||0)+(e.freightIncome||0)}
+    else{bk[e.type]=(bk[e.type]||0)+ +e.amount}
+  });
+  te.sort(function(a,b){return b.date.localeCompare(a.date)||b.id.localeCompare(a.id)});
+  var km=0,fuelL=0;
+  te.forEach(function(e){if(e.type==="trip"){km+=+(e.mileage||0);fuelL+=+(e.fuelUsed||0)+(e.fuelLiters||0)}if(e.type==="fuel")fuelL+=+(e.fuelLiters||0)});
+  te.forEach(function(e){
+    var info=ET[e.type]||{l:e.type,b:""},det="",amt=e.amount||0;
+    if(e.type==="trip"){amt=e.freightIncome||0;var ex=(e.fuelCost||0)+(e.tollCost||0)+(e.ureaCost||0)+(e.maintenanceCost||0)+(e.otherCost||0);det="收"+fm(amt)+" 支"+fm(ex)+" | "+(e.freightOrigin||"")+(e.freightDest?"→"+e.freightDest:"")+(e.mileage?"("+e.mileage+"km)":"")}
+    else{if(e.type==="freight")det=(e.freightOrigin||"")+(e.freightDest?"→"+e.freightDest:"");else if(e.note)det=e.note;if(!det)det="-"}
+    rows+='<tr><td style="font-size:12px">'+fd(e.date)+'</td><td><span class="eb '+info.b+'">'+info.l+'</span></td><td style="font-weight:600;color:'+((e.type==="freight"||e.type==="trip")?"var(--s)":"var(--d)")+'">'+fm(amt)+'</td><td style="color:var(--ts);font-size:12px;max-width:200px">'+det+'</td></tr>';
+  });
+  if(!te.length)rows='<tr><td colspan="4" style="padding:24px;text-align:center;color:var(--ts)">暂无记录</td></tr>';
+  var pr=inc-exp,avgF=fuelL>0&&km>0?(fuelL/km*100).toFixed(1)+" L/百公里":"-";
+  var ov=document.createElement("div");ov.className="mo a";
+  ov.innerHTML='<div class="m"><div class="mh"><h2>'+t.name+' 详情</h2><button class="mc" onclick="this.parentElement.parentElement.parentElement.remove()">&times;</button></div>'+
+    '<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><div><h3 style="font-size:17px;display:inline">'+t.name+'</h3> <span style="color:var(--ts);font-size:13px">'+(t.plate||"")+'</span></div>'+
+    '<div style="font-size:14px;font-weight:600;color:'+(pr>=0?"var(--s)":"var(--d)")+'">净利润：'+fm(pr)+'</div></div>'+
+    '<div class="gbox"><div><div class="lb">运费收入</div><div class="vl g">'+fm(bk.freight||0)+'</div></div><div><div class="lb">总支出</div><div class="vl r">'+fm(exp)+'</div></div>'+
+    '<div><div class="lb">加油费</div><div class="vl">'+fm(bk.fuel||0)+'</div></div><div><div class="lb">过路费</div><div class="vl">'+fm(bk.toll||0)+'</div></div>'+
+    '<div><div class="lb">尿素费</div><div class="vl">'+fm(bk.urea||0)+'</div></div><div><div class="lb">维修保养</div><div class="vl">'+fm(bk.maintenance||0)+'</div></div>'+
+    '<div><div class="lb">其他费</div><div class="vl">'+fm(bk.other||0)+'</div></div><div><div class="lb">总里程</div><div class="vl">'+(km?km.toFixed(0):"0")+' km</div></div>'+
+    '<div><div class="lb">总耗油</div><div class="vl">'+fm(fuelL)+' L</div></div><div><div class="lb">平均油耗</div><div class="vl">'+avgF+'</div></div>'+
+    '<div><div class="lb">趟数</div><div class="vl">'+trips+'</div></div><div><div class="lb">记录数</div><div class="vl">'+te.length+'</div></div></div></div>'+
+    '<div style="max-height:300px;overflow-y:auto"><table class="et"><thead><tr><th>日期</th><th>类型</th><th>金额</th><th>详情</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+    '<div style="margin-top:10px;display:flex;gap:6px"><button class="btn btn-p btn-sm" onclick="this.parentElement.parentElement.parentElement.remove();showAddTrip(\u0027'+tid+'\u0027)">+ 记一趟</button><button class="btn btn-o btn-sm" onclick="this.parentElement.parentElement.parentElement.remove();showAddSimple(\u0027'+tid+'\u0027)">记一笔</button></div></div>';
+  document.body.appendChild(ov);
+}
+function rrc(){
+  var exps=ge(),ts=gt(),tm={};ts.forEach(function(t){tm[t.id]=t});
+  var ft=document.getElementById("filterTruck").value,fy=document.getElementById("filterType").value,ff=document.getElementById("filterDateFrom").value,ft2=document.getElementById("filterDateTo").value;
+  var cm={fuel:"fuelCost",toll:"tollCost",urea:"ureaCost",freight:"freightIncome",maintenance:"maintenanceCost",other:"otherCost"};
+  var fl=exps.slice();
+  if(ft!=="all")fl=fl.filter(function(e){return e.truckId===ft});
+  if(fy!=="all"){fl=fl.filter(function(e){return e.type===fy||(e.type==="trip"&&cm[fy]&&e[cm[fy]]>0)})}
+  if(ff)fl=fl.filter(function(e){return new Date(e.date)>=new Date(ff)});
+  if(ft2)fl=fl.filter(function(e){return new Date(e.date)<=new Date(ft2)});
+  fl.sort(function(a,b){return b.date.localeCompare(a.date)||b.id.localeCompare(a.id)});
+  var tb=document.getElementById("recordsBody"),em=document.getElementById("recordsEmpty");
+  if(!fl.length){tb.innerHTML="";em.style.display="block";return}
+  em.style.display="none";var h="";
+  fl.forEach(function(e){
+    var tr=tm[e.truckId],info=ET[e.type]||{l:e.type,b:""},det="",amt=e.amount||0;
+    if(e.type==="trip"){if(fy!=="all"&&cm[fy]){var tl=(ET[fy]?ET[fy].l:fy);amt=e[cm[fy]]||0;det=(e.customerName?e.customerName+" | ":"")+"来自"+(e.freightOrigin||"")+(e.freightDest?"→"+e.freightDest:"")+"的"+tl;info=ET[fy]||{l:fy,b:"bo"}}else{amt=e.freightIncome||0;var ex=(e.fuelCost||0)+(e.tollCost||0)+(e.ureaCost||0)+(e.maintenanceCost||0)+(e.otherCost||0);det=(e.customerName?e.customerName+" | ":"")+"收"+fm(amt)+" 支"+fm(ex)+" | "+payLabel(e.payStatus)+" | "+(e.freightOrigin||"")+(e.freightDest?"→"+e.freightDest:"")+(e.mileage?"("+e.mileage+"km)":"")}}else{if(e.type==="freight")det=(e.freightOrigin||"")+(e.freightDest?"→"+e.freightDest:"");else if(e.type==="fuel"&&e.fuelLiters)det=e.fuelLiters+"L";else det=e.note||""}
+    if(!det)det="-";
+    h+="<tr><td style=\"font-size:12px\">"+fd(e.date)+'</td><td>'+(tr?tr.name:"未知")+'</td><td><span class="eb '+info.b+'">'+info.l+'</span></td><td style="font-weight:600;color:'+((e.type==="freight"||e.type==="trip")?"var(--s)":"var(--d)")+'">'+fm(amt)+'</td><td style="color:var(--ts);font-size:12px">'+det+'</td>'+
+    '<td><div class="ab" style="justify-content:center;gap:4px">'+
+    (e.type==="trip"?'<button class="btn btn-sm btn-o" onclick="showTripDetail(\u0027'+e.id+'\u0027)">查看</button><button class="btn btn-sm btn-o" onclick="editTrip(\u0027'+e.id+'\u0027)">编辑</button>'
+    :'<button class="btn btn-sm btn-o" onclick="editSimple(\u0027'+e.id+'\u0027)">编辑</button>')+
+    '<button class="btn btn-sm btn-d" onclick="deleteExpense(\u0027'+e.id+'\u0027)">删除</button></div></td></tr>';
+  });
+  tb.innerHTML=h;
+}
+function switchTab(t,b){document.querySelectorAll(".tab").forEach(function(x){x.classList.remove("a")});b.classList.add("a");document.getElementById("panelOverview").style.display=t==="overview"?"":"none";document.getElementById("panelRecords").style.display=t==="records"?"":"none";document.getElementById("panelMonthly").style.display=t==="monthly"?"":"none";if(t==="monthly")renderMonthly()}
+function cf(){document.getElementById("filterTruck").value="all";document.getElementById("filterType").value="all";document.getElementById("filterDateFrom").value="";document.getElementById("filterDateTo").value="";rrc()}
+function showManageTrucks(){
+  var ts=gt(),cl=document.getElementById("truckList");cl.innerHTML="";
+  ts.forEach(function(t){
+    var d=document.createElement("div");d.style.cssText="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--b)";
+    var n=document.createElement("input");n.style.cssText="width:100px;padding:6px 10px;border:1px solid var(--b);border-radius:4px;font-size:14px";n.value=t.name;
+    n.onchange=function(){var ts2=gt(),t2=ts2.find(function(x){return x.id===t.id});if(t2){t2.name=this.value;st(ts2)}};
+    var p=document.createElement("input");p.style.cssText="width:140px;padding:6px 10px;border:1px solid var(--b);border-radius:4px;font-size:14px";p.placeholder="车牌号";p.value=t.plate||"";
+    p.onchange=function(){var ts2=gt(),t2=ts2.find(function(x){return x.id===t.id});if(t2){t2.plate=this.value;st(ts2)}};
+    var c=document.createElement("input");c.type="color";c.value=t.color||"#1a73e8";c.style.cssText="width:32px;height:32px;border:none;cursor:pointer;padding:0";
+    c.onchange=function(){var ts2=gt(),t2=ts2.find(function(x){return x.id===t.id});if(t2){t2.color=this.value;st(ts2)}};
+    var n1=document.createElement("div");n1.style.flex="1";n1.appendChild(n);
+    var p1=document.createElement("div");p1.style.flex="1";p1.appendChild(p);
+    d.appendChild(n1);d.appendChild(p1);d.appendChild(c);
+    if(ts.length>1){var rm=document.createElement("button");rm.className="btn btn-sm btn-d";rm.textContent="删除";
+      rm.onclick=function(){if(confirm("确定删除该车辆？")){st(gt().filter(function(x){return x.id!==t.id}));showManageTrucks()}};d.appendChild(rm)}
+    cl.appendChild(d);
+  });
+  openModal("truckModal");
+}
+function addTruck(){var ts=gt();ts.push({id:"t"+Date.now(),name:"新车",plate:"",color:"#666"});st(ts);showManageTrucks()}
+function renderMonthly(){
+  var ts=gt(),exps=ge(),tid=document.getElementById("monthlyTruck").value,yr=document.getElementById("monthlyYear").value,mo=document.getElementById("monthlyMonth").value;
+  var fy=document.getElementById("monthlyType").value,prefix=yr+"-"+mo,ct=document.getElementById("monthlyContent");ct.innerHTML="";var hasData=false;
+  ts.forEach(function(t){
+    if(tid!=="all"&&tid!==t.id)return;
+    var te=exps.filter(function(e){return e.truckId===t.id&&e.date&&e.date.indexOf(prefix)===0});
+    if(fy!=="all"){var cm={fuel:"fuelCost",toll:"tollCost",urea:"ureaCost",freight:"freightIncome",maintenance:"maintenanceCost",other:"otherCost"};te=te.filter(function(e){return e.type===fy||(e.type==="trip"&&cm[fy]&&e[cm[fy]]>0)})}
+    if(!te.length)return;hasData=true;
+    var inc=0,exp=0,trips=0,bk={},km=0,fuelL=0;
+    te.forEach(function(e){
+      if(e.type==="trip"){inc+=+(e.freightIncome||0);exp+=+(e.fuelCost||0)+(e.tollCost||0)+(e.ureaCost||0)+(e.maintenanceCost||0)+(e.otherCost||0);trips++;km+=+(e.mileage||0);fuelL+=+(e.fuelUsed||0)+(e.fuelLiters||0);bk.freight=(bk.freight||0)+(e.freightIncome||0);bk.fuel=(bk.fuel||0)+(e.fuelCost||0);bk.toll=(bk.toll||0)+(e.tollCost||0);bk.urea=(bk.urea||0)+(e.ureaCost||0);bk.maintenance=(bk.maintenance||0)+(e.maintenanceCost||0);bk.other=(bk.other||0)+(e.otherCost||0)}
+      else if(e.type==="freight"){inc+=+e.amount;trips++;bk.freight=(bk.freight||0)+ +e.amount}else{exp+=+e.amount;bk[e.type]=(bk[e.type]||0)+ +e.amount}
+      if(e.type==="fuel")fuelL+=+(e.fuelLiters||0);
+    });
+    var pr=inc-exp,avgF=fuelL>0&&km>0?(fuelL/km*100).toFixed(1):"-";
+    var fHtml='<div class="card" style="margin-bottom:12px;padding:16px"><h3 style="font-size:15px;margin-bottom:10px">'+t.name+' <span style="color:var(--ts);font-size:12px">'+(t.plate||"")+'</span> <span style="font-size:12px;color:var(--ts)">'+yr+"年"+mo+"月</span></h3>"+
+      '<div class="gbox"><div><div class="lb">运费收入</div><div class="vl g">'+fm(inc)+'</div></div><div><div class="lb">总支出</div><div class="vl r">'+fm(exp)+'</div></div>'+
+      '<div><div class="lb">净利润</div><div class="vl" style="color:'+(pr>=0?"var(--s)":"var(--d)")+'">'+fm(pr)+'</div></div>'+
+      '<div><div class="lb">加油费</div><div class="vl">'+fm(bk.fuel||0)+'</div></div><div><div class="lb">过路费</div><div class="vl">'+fm(bk.toll||0)+'</div></div>'+
+      '<div><div class="lb">尿素费</div><div class="vl">'+fm(bk.urea||0)+'</div></div><div><div class="lb">维修保养</div><div class="vl">'+fm(bk.maintenance||0)+'</div></div>'+
+      '<div><div class="lb">其他费</div><div class="vl">'+fm(bk.other||0)+'</div></div>'+
+      '<div><div class="lb">总里程</div><div class="vl">'+(km?km.toFixed(0):"0")+' km</div></div><div><div class="lb">总耗油</div><div class="vl">'+fm(fuelL)+' L</div></div>'+
+      '<div><div class="lb">平均油耗</div><div class="vl">'+avgF+'</div></div><div><div class="lb">趟数</div><div class="vl">'+trips+'</div></div></div>'+
+      '<table class="et" style="font-size:12px"><thead><tr><th style="width:110px">日期</th><th style="width:70px">类型</th><th style="width:80px">金额</th><th>详情</th></tr></thead><tbody>';
+    te.sort(function(a,b){return b.date.localeCompare(a.date)||b.id.localeCompare(a.id)});
+    te.forEach(function(e){
+      var info=ET[e.type]||{l:e.type,b:""},det="",amt=e.amount||0;
+      if(e.type==="trip"){if(fy!=="all"&&cm[fy]){var tl=(ET[fy]?ET[fy].l:fy);amt=e[cm[fy]]||0;det=(e.customerName?e.customerName+" | ":"")+"来自"+(e.freightOrigin||"")+(e.freightDest?"→"+e.freightDest:"")+"的"+tl;}else{amt=e.freightIncome||0;var ex=(e.fuelCost||0)+(e.tollCost||0)+(e.ureaCost||0)+(e.maintenanceCost||0)+(e.otherCost||0);det=(e.customerName?e.customerName+" | ":"")+"收"+fm(amt)+" 支"+fm(ex)+" | "+payLabel(e.payStatus)+" | "+(e.freightOrigin||"")+(e.freightDest?"→"+e.freightDest:"")+(e.mileage?"("+e.mileage+"km)":"")}}else{if(e.type==="freight")det=(e.freightOrigin||"")+(e.freightDest?"→"+e.freightDest:"");else det=e.note||"-"}
+      fHtml+="<tr><td style=\"font-size:12px\">"+fd(e.date)+'</td><td><span class="eb '+info.b+'">'+info.l+'</span></td><td style="font-weight:600;color:'+((e.type==="freight"||e.type==="trip")?"var(--s)":"var(--d)")+'">'+fm(amt)+'</td><td style="color:var(--ts);font-size:12px">'+det+'</td></tr>';
+    });
+    fHtml+='</tbody></table></div>';
+    ct.innerHTML+=fHtml;
+  });
+  if(!hasData)ct.innerHTML='<div class="es">该月暂无运营记录</div>';
+}
+function backupData(){
+  var data={trucks:gt(),expenses:ge(),backupAt:new Date().toISOString()};
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  var today=new Date().toISOString().slice(0,10);
+  var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="冷藏车数据备份_"+today+".json";a.click();URL.revokeObjectURL(a.href);
+  saveHtmlBackup(today);
+  localStorage.setItem("lg_backup_reminder",Date.now().toString());localStorage.removeItem("lg_backup_dirty");showBackupBar("备份已下载，同时已生成HTML数据备份");alert("备份已生成！JSON用于恢复系统，HTML数据备份可直接双击查看。");
+}
+function buildPdfBackupHtml(){
+  var ts=gt(),exps=ge(),tm={};ts.forEach(function(t){tm[t.id]=t});
+  var totalIncome=0,totalExpense=0,rows="";
+  exps.slice().sort(function(a,b){return (b.date||"").localeCompare(a.date||"")||(b.id||"").localeCompare(a.id||"")}).forEach(function(e){
+    var tr=tm[e.truckId]||{name:"未知",plate:""},type=(ET[e.type]||{l:e.type}).l,inc=0,exp=0,detail="";
+    if(e.type==="trip"){inc=+(e.freightIncome||0);exp=+(e.fuelCost||0)+(e.tollCost||0)+(e.ureaCost||0)+(e.maintenanceCost||0)+(e.otherCost||0);detail=(e.freightOrigin||"")+(e.freightDest?" → "+e.freightDest:"")+(e.note?"；"+e.note:"")}
+    else if(e.type==="freight"){inc=+e.amount;detail=e.note||""}else{exp=+e.amount;detail=e.note||""}
+    totalIncome+=inc;totalExpense+=exp;
+    rows+='<tr><td>'+esc(e.date||"")+'</td><td>'+esc(tr.name)+'</td><td>'+esc(tr.plate||"")+'</td><td>'+esc(type)+'</td><td>'+esc(e.type==="trip"?payLabel(e.payStatus):"")+'</td>'+
+      '<td class="num">'+fm(e.type==="trip"?e.freightIncome||0:e.type==="freight"?e.amount||0:0)+'</td><td class="num">'+fm(e.type==="trip"?e.fuelCost||0:e.type==="fuel"?e.amount||0:0)+'</td>'+
+      '<td class="num">'+fm(e.type==="trip"?e.tollCost||0:e.type==="toll"?e.amount||0:0)+'</td><td class="num">'+fm(e.type==="trip"?e.ureaCost||0:e.type==="urea"?e.amount||0:0)+'</td>'+
+      '<td class="num">'+fm(e.type==="trip"?e.maintenanceCost||0:e.type==="maintenance"?e.amount||0:0)+'</td><td class="num">'+fm(e.type==="trip"?e.otherCost||0:e.type==="other"?e.amount||0:0)+'</td>'+
+      '<td>'+esc(e.customerName||"")+'</td><td>'+esc(e.customerPhone||"")+'</td>'+
+      '<td>'+esc(e.freightOrigin||"")+'</td><td>'+esc(e.freightDest||"")+'</td><td>'+esc(fdt(e.departTime))+'</td><td>'+esc(fdt(e.returnTime))+'</td>'+
+      '<td class="num">'+esc(e.loadWeight||"")+'</td><td class="num">'+esc(e.mileage||"")+'</td><td class="num">'+esc(e.fuelUsed||e.fuelLiters||"")+'</td>'+
+      '<td>'+esc(e.cargoType||"")+'</td><td>'+esc(e.driverName||"")+'</td><td>'+esc(e.driverPhone||"")+'</td><td>'+esc(e.shipperName||"")+'</td>'+
+      '<td>'+esc(e.shipperPhone||"")+'</td><td>'+esc(e.receiverName||"")+'</td><td>'+esc(e.receiverPhone||"")+'</td><td>'+esc(e.note||detail||"")+'</td></tr>';
+  });
+  if(!rows)rows='<tr><td colspan="28" class="empty">暂无运营数据</td></tr>';
+  var truckRows=ts.map(function(t){
+    var te=exps.filter(function(e){return e.truckId===t.id}),inc=0,exp=0,trips=0;
+    te.forEach(function(e){if(e.type==="trip"){inc+=+(e.freightIncome||0);exp+=+(e.fuelCost||0)+(e.tollCost||0)+(e.ureaCost||0)+(e.maintenanceCost||0)+(e.otherCost||0);trips++}else if(e.type==="freight"){inc+=+e.amount;trips++}else exp+=+e.amount});
+    return '<tr><td>'+esc(t.name)+'</td><td>'+esc(t.plate||"")+'</td><td class="num">'+fm(inc)+'</td><td class="num">'+fm(exp)+'</td><td class="num">'+fm(inc-exp)+'</td><td class="num">'+trips+'</td></tr>';
+  }).join("");
+  return '<!doctype html><html><head><meta charset="utf-8"><title>冷藏车运营数据备份</title><style>body{font-family:"Microsoft YaHei",Arial,sans-serif;color:#222;margin:24px}h1{font-size:22px;margin:0 0 6px}h2{font-size:16px;margin:22px 0 8px}.meta{color:#666;font-size:12px;margin-bottom:16px}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}.box{border:1px solid #ddd;padding:10px}.box .l{color:#666;font-size:12px}.box .v{font-size:18px;font-weight:700;margin-top:4px}.table-wrap{overflow:auto;border:1px solid #ddd}table{width:100%;border-collapse:collapse;font-size:12px;page-break-inside:auto}th,td{border:1px solid #ddd;padding:6px;vertical-align:top}th{background:#f2f4f7;text-align:left;white-space:nowrap}.num{text-align:right;white-space:nowrap}.empty{text-align:center;color:#777;padding:20px}@media print{body{margin:8mm}.no-print{display:none}tr{page-break-inside:avoid}table{font-size:9px}}</style></head><body><button class="no-print" onclick="window.print()" style="float:right;padding:8px 14px">保存为 PDF</button><h1>冷藏车运营数据备份</h1><div class="meta">生成时间：'+esc(new Date().toLocaleString("zh-CN"))+' · 数据来源：浏览器本地运营记录 · 完整字段版</div><div class="summary"><div class="box"><div class="l">总收入</div><div class="v">'+fm(totalIncome)+'</div></div><div class="box"><div class="l">总支出</div><div class="v">'+fm(totalExpense)+'</div></div><div class="box"><div class="l">净利润</div><div class="v">'+fm(totalIncome-totalExpense)+'</div></div></div><h2>车辆汇总</h2><table><thead><tr><th>车辆</th><th>车牌</th><th>收入</th><th>支出</th><th>净利润</th><th>趟数</th></tr></thead><tbody>'+truckRows+'</tbody></table><h2>流水明细（完整字段）</h2><div class="table-wrap"><table><thead><tr><th>日期</th><th>车辆</th><th>车牌</th><th>类型</th><th>收款状态</th><th>运费收入</th><th>加油费</th><th>过路费</th><th>尿素费</th><th>维修保养</th><th>其他费用</th><th>客户/货主</th><th>客户电话</th><th>货源地</th><th>目的地</th><th>出发时间</th><th>返回时间</th><th>载重吨</th><th>里程km</th><th>耗油L</th><th>货物</th><th>司机</th><th>司机电话</th><th>装货方</th><th>装货电话</th><th>卸货方</th><th>卸货电话</th><th>备注</th></tr></thead><tbody>'+rows+'</tbody></table></div><script>setTimeout(function(){window.print()},500)<\/script></body></html>';
+}
+function openPdfBackup(){
+  var w=window.open("","_blank");if(!w){alert("浏览器拦截了PDF窗口，请允许弹窗后再点立即备份。");return}
+  w.document.open();w.document.write(buildPdfBackupHtml());w.document.close();
+}
+async function saveHtmlBackup(today){
+  var html=buildPdfBackupHtml().replace(/<button class="no-print"[\s\S]*?<\/button>/,"").replace(/<script>[\s\S]*?<\/script>/,"");
+  var name="冷藏车运营数据备份_"+today+".html";
+  if(window.showSaveFilePicker){
+    try{
+      var h=await window.showSaveFilePicker({suggestedName:name,types:[{description:"HTML数据备份",accept:{"text/html":[".html"]}}]});
+      var w=await h.createWritable();await w.write(html);await w.close();return;
+    }catch(e){if(e.name==="AbortError")return}
+  }
+  var b=new Blob([html],{type:"text/html;charset=utf-8"}),a=document.createElement("a");
+  a.href=URL.createObjectURL(b);a.download=name;a.click();URL.revokeObjectURL(a.href);
+}
+function restoreData(ev){
+  var file=ev.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{var data=JSON.parse(e.target.result);if(data.trucks&&data.expenses){st(data.trucks);se(data.expenses);alert("数据恢复成功！");init()}else alert("备份文件格式不正确")}
+    catch(ex){alert("备份文件解析失败："+ex.message)}
+  };
+  reader.readAsText(file);ev.target.value="";
+}
+function exportData(){
+  var exps=ge(),ts=gt(),tm={};ts.forEach(function(t){tm[t.id]=t});
+  if(!exps.length){alert("暂无数据");return}
+  var rows=[["日期","车辆","车牌号","类型","收款状态","运费收入","加油费","过路费","尿素费","维修保养","其他费用","客户/货主","客户电话","货源地","目的地","出发时间","返回时间","载重吨","里程km","耗油L","货物","司机","司机电话","装货方","装货电话","卸货方","卸货电话","备注"]];
+  exps.slice().sort(function(a,b){return b.date.localeCompare(a.date)}).forEach(function(e){
+    var tr=tm[e.truckId]||{name:"未知",plate:""},tl=(ET[e.type]||{l:e.type}).l;
+    if(e.type==="trip")rows.push([e.date,tr.name,tr.plate||"",tl,payLabel(e.payStatus),e.freightIncome||0,e.fuelCost||0,e.tollCost||0,e.ureaCost||0,e.maintenanceCost||0,e.otherCost||0,e.customerName||"",e.customerPhone||"",e.freightOrigin||"",e.freightDest||"",e.departTime||"",e.returnTime||"",e.loadWeight||0,e.mileage||0,e.fuelUsed||0,e.cargoType||"",e.driverName||"",e.driverPhone||"",e.shipperName||"",e.shipperPhone||"",e.receiverName||"",e.receiverPhone||"",e.note||""]);
+    else rows.push([e.date,tr.name,tr.plate||"",tl,"",e.type==="freight"?e.amount||0:"",e.type==="fuel"?e.amount||0:"",e.type==="toll"?e.amount||0:"",e.type==="urea"?e.amount||0:"",e.type==="maintenance"?e.amount||0:"",e.type==="other"?e.amount||0:"","","","","","","","","","","","","","","","","",e.note||""]);
+  });
+  var csv="\ufeff"+rows.map(function(r){return r.map(csvCell).join(",")}).join("\n");
+  var b=new Blob([csv],{type:"text/csv;charset=utf-8;"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="冷藏车运营数据_"+new Date().toISOString().slice(0,10)+".csv";a.click();URL.revokeObjectURL(a.href);
+}
+function openModal(id){document.getElementById(id).classList.add("a");document.body.style.overflow="hidden"}
+function closeModal(id){document.getElementById(id).classList.remove("a");document.body.style.overflow="";document.getElementById("simpleEditId").value=""}
+document.addEventListener("click",function(e){document.querySelectorAll(".mo.a").forEach(function(o){if(e.target===o)closeModal(o.id)})});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"){document.querySelectorAll(".mo.a").forEach(function(o){closeModal(o.id)})}});
+function init(){syncFromServer();pt();ro();rc();rrc()}
+function showBackupBar(msg){var e=document.getElementById("backupBar");e.style.display="flex";e.innerHTML='<span class="txt">\u26a0\ufe0f '+(msg||"数据存储在浏览器本地，建议定期备份")+' · '+lastBackupText()+'</span><div style="display:flex;gap:6px"><button class="btn btn-sm" onclick="backupData()">立即备份</button><button class="btn btn-sm btn-o" onclick="document.getElementById(\'restoreInput\').click()">恢复数据</button><input type="file" id="restoreInput" accept=".json" style="display:none" onchange="restoreData(event)"><button class="btn btn-sm btn-o" onclick="this.parentElement.parentElement.style.display=\'none\'">关闭</button></div>'}
+function initBackup(){var key="lg_backup_reminder";if(localStorage.getItem("lg_backup_dirty")==="1"){showBackupBar("有未备份的数据变更");return}if(!localStorage.getItem(key)){showBackupBar()}else{var t=parseInt(localStorage.getItem(key));if(Date.now()-t>7*24*60*60*1000)showBackupBar()}}
+init();
+initBackup();
+</script>
+</body>
+</html>
+
+
+
+
