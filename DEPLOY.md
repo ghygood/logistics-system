@@ -42,6 +42,18 @@ python server.py
 
 7. 部署完成后，打开 Render 提供的网址。
 
+## 设置访问密码
+
+部署到公网后，必须在 Render 的 `Environment` 页面添加环境变量：
+
+```text
+APP_PASSWORD=你自己的访问密码
+```
+
+保存后点击 `Manual Deploy` 重新部署。
+
+之后打开网站时会要求输入访问密码，后端 `/api/data` 也会校验这个密码。
+
 ## 重要提醒
 
 当前后端会把数据写入 `server_data.json`。很多免费云平台的磁盘不是永久稳定存储，重启或重新部署后可能丢失数据。

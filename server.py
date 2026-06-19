@@ -8,6 +8,7 @@ import socketserver
 import urllib.parse
 
 PORT = int(os.environ.get("PORT", "8080"))
+APP_PASSWORD = os.environ.get("APP_PASSWORD", "")
 DATA_FILE = os.path.join(os.path.dirname(__file__), "server_data.json")
 HTML_FILE = os.path.join(os.path.dirname(__file__), "index.html")
 
@@ -21,10 +22,26 @@ def save_data(data):
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
+def get_password_from_headers(handler):
+    return handler.headers.get("X-App-Password", "")
+
+def is_authorized(handler):
+    return not APP_PASSWORD or get_password_from_headers(handler) == APP_PASSWORD
+
+def send_unauthorized(handler):
+    handler.send_response(401)
+    handler.send_header("Content-Type", "application/json;charset=utf-8")
+    handler.send_header("Access-Control-Allow-Origin", "*")
+    handler.end_headers()
+    handler.wfile.write(json.dumps({"error": "unauthorized"}).encode("utf-8"))
+
 class Handler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         path = urllib.parse.urlparse(self.path).path
         if path == "/api/data":
+            if not is_authorized(self):
+                send_unauthorized(self)
+                return
             data = load_data()
             self.send_response(200)
             self.send_header("Content-Type", "application/json;charset=utf-8")
@@ -46,6 +63,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         path = urllib.parse.urlparse(self.path).path
         if path == "/api/data":
+            if not is_authorized(self):
+                send_unauthorized(self)
+                return
             length = int(self.headers.get("Content-Length", 0))
             body = self.rfile.read(length).decode("utf-8")
             try:
@@ -66,7 +86,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, X-App-Password")
         self.end_headers()
 
 if __name__ == "__main__":
