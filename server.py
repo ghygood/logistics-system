@@ -6,19 +6,56 @@ import json
 import os
 import socketserver
 import urllib.parse
+import urllib.request
 
 PORT = int(os.environ.get("PORT", "8080"))
 APP_PASSWORD = os.environ.get("APP_PASSWORD", "")
-DATA_FILE = os.path.join(os.path.dirname(__file__), "server_data.json")
+DATA_FILE = os.environ.get("DATA_FILE", os.path.join(os.path.dirname(__file__), "server_data.json"))
 HTML_FILE = os.path.join(os.path.dirname(__file__), "index.html")
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "").rstrip("/")
+SUPABASE_SERVICE_KEY = os.environ.get("SUPABASE_SERVICE_KEY", "")
+SUPABASE_TABLE = os.environ.get("SUPABASE_TABLE", "logistics_data")
+DATA_ID = os.environ.get("DATA_ID", "main")
+
+def use_supabase():
+    return bool(SUPABASE_URL and SUPABASE_SERVICE_KEY)
+
+def supabase_request(method, path, body=None):
+    url = f"{SUPABASE_URL}/rest/v1/{path}"
+    headers = {
+        "apikey": SUPABASE_SERVICE_KEY,
+        "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+    }
+    if method == "POST":
+        headers["Prefer"] = "resolution=merge-duplicates"
+    data = None
+    if body is not None:
+        data = json.dumps(body, ensure_ascii=False).encode("utf-8")
+    req = urllib.request.Request(url, data=data, headers=headers, method=method)
+    with urllib.request.urlopen(req, timeout=10) as resp:
+        raw = resp.read().decode("utf-8")
+        return json.loads(raw) if raw else None
 
 def load_data():
+    if use_supabase():
+        rows = supabase_request("GET", f"{SUPABASE_TABLE}?id=eq.{urllib.parse.quote(DATA_ID)}&select=data")
+        if rows:
+            return rows[0].get("data") or {"trucks": [], "expenses": []}
+        return {"trucks": [], "expenses": []}
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, "r", encoding="utf-8") as f:
             return json.load(f)
     return {"trucks": [], "expenses": []}
 
 def save_data(data):
+    if use_supabase():
+        supabase_request("POST", f"{SUPABASE_TABLE}?on_conflict=id", {
+            "id": DATA_ID,
+            "data": data,
+        })
+        return
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
