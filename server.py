@@ -7,6 +7,7 @@ import os
 import socketserver
 import urllib.parse
 import urllib.request
+from datetime import datetime, timezone
 
 PORT = int(os.environ.get("PORT", "8080"))
 APP_PASSWORD = os.environ.get("APP_PASSWORD", "")
@@ -54,6 +55,7 @@ def save_data(data):
         supabase_request("POST", f"{SUPABASE_TABLE}?on_conflict=id", {
             "id": DATA_ID,
             "data": data,
+            "updated_at": datetime.now(timezone.utc).isoformat(),
         })
         return
     with open(DATA_FILE, "w", encoding="utf-8") as f:
